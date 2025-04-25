@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask CRUD Application</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet">
+    <link href="{{url_for('static', filename = 'teacher.png' )}}" rel="shortcut icon">
+</head>
+<body>
+{% block body %}
+<div class="container">
+    <div class="well text-center">
+        <h1>Python Flask Crud</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col md-12">
+                <h2>
+                    Student List
+                    <button class="btn btn-primary float-end" data-bs-target="#exampleModal" data-bs-toggle="modal"
+                            type="button">
+                        Add Student
+                    </button>
+                </h2>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success" role="alert">
+                    <button aria-label="Close" class="float-end btn-close" data-bs-dismiss="alert"
+                            type="button"></button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {%for row in students%}
+                    <tr>
+                        <td>{{row.0}}</td>
+                        <td>{{row.1}}</td>
+                        <td>{{row.2}}</td>
+                        <td>{{row.3}}</td>
+                        <td>{{row.4}}</td>
+                        <td>{{row.5}}</td>
+                        <td>{{row.6}}</td>
+
+                        <td>
+                            <a class="btn p-1 btn-primary btn-sm" data-bs-target="#exampleModal1{{row.0}}"
+                               data-bs-toggle="modal"
+                               href="/update/{{row.0}}">Edit</a>
+                            <a class="btn p-1 btn-danger btn-sm" href="/delete/{{row.0}}">Delete</a>
+                        </td>
+                        <div aria-hidden="true" aria-labelledby="exampleModalLabel1" class="modal fade"
+                             id="exampleModal1{{row.0}}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel1">Edit information of
+                                            Student {{row.1}}</h1>
+                                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                type="button"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action={{url_for('update')}} method="POST">
+                                            <div class="form-group">
+                                                <label>Name:</label>
+                                                <input type="hidden" name="id" value="{{row.0}}">
+                                                <input class="form-control" name="name" placeholder="{{row.1}}"
+                                                       required="1" type="text">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email:</label>
+                                                <input class="form-control" name="email" placeholder="{{row.2}}"
+                                                       required="1" type="text">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Phone:</label>
+                                                <input class="form-control" name="phone" placeholder="{{row.6}}"
+                                                       required="1" type="text">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Address:</label>
+                                                <input class="form-control" name="address" placeholder="{{row.3}}"
+                                                       required="1" type="text">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>City:</label>
+                                                <input class="form-control" name="city" placeholder="{{row.4}}"
+                                                       required="1" type="text">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Pincode:</label>
+                                                <input class="form-control" name="pincode" placeholder="{{row.5}}"
+                                                       required="1" type="text">
+                                            </div>
+                                            <div class="form-group float-end m-2">
+                                                <button class="btn btn-primary" type="submit">Update Data</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
+                                            Close
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                    {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--            modal for add new student-->
+</div>
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="exampleModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new Student</h1>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <form action={{url_for('add')}} method="POST">
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input class="form-control" name="name" required="1" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input class="form-control" name="email" required="1" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone:</label>
+                        <input class="form-control" name="phone" required="1" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Address:</label>
+                        <input class="form-control" name="address" required="1" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>City:</label>
+                        <input class="form-control" name="city" required="1" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode:</label>
+                        <input class="form-control" name="pincode" required="1" type="text">
+                    </div>
+                    <div class="form-group float-end m-2">
+                        <button class="btn btn-primary" type="submit">Insert Data</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+</div>
+</body>
+
+<script crossorigin="anonymous"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+</html>

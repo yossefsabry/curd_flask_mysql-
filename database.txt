@@ -1,0 +1,5 @@
+
+CREATE USER 'foo'@'localhost' IDENTIFIED BY 'foo123';
+GRANT ALL PRIVILEGES ON curd_flask.* TO 'foo'@'localhost';
+FLUSH PRIVILEGES;
+
